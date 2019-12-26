@@ -176,14 +176,12 @@ impl Error {
     /// # Panics
     /// This function will panic if `errors.is_empty() == true`.
     pub fn multiple(mut errors: Vec<Error>) -> Self {
-        if errors.len() > 1 {
-            Error::new(ErrorKind::Multiple(errors))
-        } else if errors.len() == 1 {
-            errors
+        match errors.len() {
+            0 => panic!("Can't deal with 0 errors"),
+            1 => errors
                 .pop()
-                .expect("Error array of length 1 has a first item")
-        } else {
-            panic!("Can't deal with 0 errors")
+                .expect("Error array of length 1 has a first item"),
+            _ => Error::new(ErrorKind::Multiple(errors)),
         }
     }
 }
@@ -383,7 +381,7 @@ impl StdError for Error {
         &self.kind.description()
     }
 
-    fn cause(&self) -> Option<&StdError> {
+    fn cause(&self) -> Option<&dyn StdError> {
         None
     }
 }
