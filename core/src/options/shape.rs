@@ -236,7 +236,9 @@ mod tests {
     /// parse a string as a syn::Meta instance.
     fn pm(tokens: TokenStream) -> ::std::result::Result<syn::Meta, String> {
         let attribute: syn::Attribute = parse_quote!(#[#tokens]);
-        attribute.parse_meta().or(Err("Unable to parse".into()))
+        attribute
+            .parse_meta()
+            .or_else(|_| Err("Unable to parse".into()))
     }
 
     fn fm<T: FromMeta>(tokens: TokenStream) -> T {
