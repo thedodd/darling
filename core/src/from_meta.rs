@@ -122,6 +122,8 @@ pub trait FromMeta: Sized {
 
 // FromMeta impls for std and syn types.
 
+impl<T> FromMeta for Vec<T> where T: FromMeta {}
+
 impl FromMeta for () {
     fn from_word() -> Result<Self> {
         Ok(())
